@@ -1,8 +1,34 @@
+
+set $base00 #101218
+set $base01 #1f222d
+set $base02 #252936
+set $base03 #7780a1
+set $base04 #C0C5CE
+set $base05 #d1d4e0
+set $base06 #C9CCDB
+set $base07 #ffffff
+set $base08 #ee829f
+set $base09 #f99170
+set $base0A #ffefcc
+set $base0B #a5ffe1
+set $base0C #97e0ff
+set $base0D #97bbf7
+set $base0E #c0b7f9
+set $base0F #fcc09e
+
+set $GreedBorder #2EB1A6
+
+
 # i3 config file (v4)
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
 # Set mod key (Mod1=<Alt>, Mod4=<Super>)
 set $mod Mod4
+
+# path to terminal. Override this to specify a custom terminal.
+# Uncomment to enable st
+#set $terminal_path /usr/local/bin/st
+set $terminal_path /usr/bin/xfce4-terminal
 
 # set default desktop layout (default is tiling)
 # workspace_layout tabbed <stacking|tabbed>
@@ -27,16 +53,23 @@ font xft:Noto Sans 10
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec terminal
+#bindsym $mod+Return exec terminal
+
+# start a terminal
+bindsym $mod+Return exec $terminal_path
 
 # kill focused window
 bindsym $mod+Shift+q kill
 
 # start program launcher
-bindsym $mod+d exec --no-startup-id dmenu_recency
+#bindsym $mod+d exec --no-startup-id dmenu_recency
+bindsym $mod+d exec --no-startup-id rofi -show drun
 
 # launch categorized menu
 bindsym $mod+z exec --no-startup-id morc_menu
+
+# Open up youtube in full app view to the tenth work space.
+# bindsym $mod+Shift+y workspace $ws10, exec "chromium-browser --chrome-frame --kiosk 'http://www.youtube.com' --noerrdialogs --disable-translate --no-first-run --fast --fast-start --disable-infobars --disable-features=TranslateUI"
 
 ################################################################################################
 ## sound-section - DO NOT EDIT if you wish to automatically upgrade Alsa -> Pulseaudio later! ##
@@ -117,8 +150,11 @@ bindsym $mod+e layout toggle split
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
 
+# rofi app and window launchers
+bindsym $mod+space exec xfce4-popup-whiskermenu
+
 # change focus between tiling / floating windows
-bindsym $mod+space focus mode_toggle
+# bindsym $mod+space focus mode_toggle
 
 # toggle sticky
 bindsym $mod+Shift+s sticky toggle
@@ -159,6 +195,7 @@ bindsym $mod+5 workspace $ws5
 bindsym $mod+6 workspace $ws6
 bindsym $mod+7 workspace $ws7
 bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
 
 # Move focused container to workspace
 bindsym $mod+Ctrl+1 move container to workspace $ws1
@@ -321,8 +358,9 @@ set_from_resource $term_color15    color15
 # Start i3bar to display a workspace bar (plus the system information i3status if available)
 bar {
 	i3bar_command i3bar
-	status_command i3status
-	position bottom
+        # Just going to comment out the line below because xfce panel can handle it.
+	# status_command i3status
+	position top
 
 ## please set your primary output first. Example: 'xrandr --output eDP1 --primary'
 #	tray_output primary
@@ -333,8 +371,9 @@ bar {
 	font xft:Noto Sans 10.5
 	strip_workspace_numbers yes
 
+# Background was #283339
     colors {
-        background #283339
+        background #002B36
         statusline #F9FAF9
         separator  #454947
 
@@ -416,3 +455,25 @@ mode "$mode_gaps_outer" {
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
+
+client.focused $GreedBorder $GreedBorder $base00 $base01
+
+# Run programs when i3 starts
+
+# Set a cli color palette with wal
+#exec --no-startup-id wal -ni /home/craigparsons/Pictures/Palettes/atom-dark-color256.png
+
+# Open up xfce4 panel
+#exec --no-startup-id xfce4-panel --disable-wm-check
+
+# Start the composite manager
+exec --no-startup-id compton -f
+
+# Launch the shortcut Conky window on first login
+#exec --no-startup-id /usr/bin/regolith-ftue
+
+# Hide the mouse pointer if unused for a duration
+#exec --no-startup-id /usr/bin/unclutter -b
+
+# Refresh wallpaper on screen resolution change
+exec --no-startup-id feh --randomize --bg-fill ~/Pictures/Wallpaper/
